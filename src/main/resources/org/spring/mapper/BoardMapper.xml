@@ -11,12 +11,12 @@
 	
 	<insert id="insert">
 		insert into tbl_board (bno, title, content, writer)
-		values (seq_board.nextval, #{title} ,#{content}, #{writer})
+		values (nextval('seq_board'), #{title} ,#{content}, #{writer})
 	</insert>
 
 	<insert id="insertSelectKey">
 	<selectKey order="BEFORE" keyProperty="bno" resultType="long">
-		select seq_board.nextval from dual
+		select nextval('seq_board')
 	</selectKey>
 		insert into tbl_board (bno, title, content, writer)
 		values (#{bno}, #{title} ,#{content}, #{writer})
@@ -35,8 +35,13 @@
 		set title = #{title},
 		content = #{content},
 		writer = #{writer},
-		updatedate = sysdate
+		updatedate = current_date
 		where bno= #{bno}	
 	</update>
+	
+	<select id="getListWithPaging" resultType="org.spring.vo.BoardVO">
+	
+	</select>
+	
 	
 </mapper>

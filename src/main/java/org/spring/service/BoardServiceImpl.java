@@ -1,54 +1,81 @@
 package org.spring.service;
 
+
 import java.util.List;
 
-import org.spring.mapper.BoardMapper;
-import org.spring.vo.BoardVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.spring.vo.BoardVO;
+import org.spring.vo.Criteria;
+import org.spring.mapper.BoardMapper;
 
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
-@Service
 @Log4j
-@RequiredArgsConstructor
-@ToString
+@Service
+@AllArgsConstructor
 public class BoardServiceImpl implements BoardService {
 	
-	private final BoardMapper mapper;
+	@Setter(onMethod_ = @Autowired)
+	private BoardMapper mapper;
 
 	@Override
-	public Long register(BoardVO board) {
-		// TODO Auto-generated method stub
+	public void register(BoardVO board) {
+
+		log.info("register......" + board);
+
 		mapper.insertSelectKey(board);
-		return board.getBno();
 	}
 
 	@Override
 	public BoardVO get(Long bno) {
-		// TODO Auto-generated method stub
+
+		log.info("get......" + bno);
+
 		return mapper.read(bno);
+
 	}
 
 	@Override
-	public int modify(BoardVO board) {
-		// TODO Auto-generated method stub
-		return mapper.update(board);
+	public boolean modify(BoardVO board) {
+
+		log.info("modify......" + board);
+
+		return mapper.update(board) == 1;
 	}
 
 	@Override
-	public int remove(Long bno) {
-		// TODO Auto-generated method stub
-		return mapper.delete(bno);
+	public boolean remove(Long bno) {
+
+		log.info("remove...." + bno);
+
+		return mapper.delete(bno) == 1;
+	}
+
+	// @Override
+	// public List<BoardVO> getList() {
+	//
+	// log.info("getList..........");
+	//
+	// return mapper.getList();
+	// }
+
+	@Override
+	public List<BoardVO> getList(Criteria cri) {
+
+		log.info("get List with criteria: " + cri);
+
+		return mapper.getListWithPaging(cri);
 	}
 
 	@Override
-	public List<BoardVO> getList() {
-		// TODO Auto-generated method stub
-		return mapper.getList();
+	public int getTotal(Criteria cri) {
+
+		log.info("get total count");
+		return mapper.getTotalCount(cri);
 	}
-	
 	
 	
 
